@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>International Day of Peace - Professional Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            opacity: 0;
+            transform: translateX(100%) scale(0.95);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            z-index: 10;
+        }
+
+        .slide.prev {
+            transform: translateX(-100%) scale(0.95);
+        }
+
+        /* Slide Counter */
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            z-index: 1000;
+            border: 2px solid #0066cc;
+            box-shadow: 0 4px 15px rgba(0, 102, 204, 0.3);
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: #0066cc;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 102, 204, 0.4);
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: #0052a3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.6);
+        }
+
+        .nav-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+            opacity: 0.5;
+            box-shadow: none;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 5px;
+            background: #0066cc;
+            transition: width 0.7s ease;
+            z-index: 1001;
+            box-shadow: 0 0 10px rgba(0, 102, 204, 0.8);
+        }
+
+        /* SLIDE 1: Producers */
+        #slide1 {
+            background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #000 100%);
+        }
+
+        .producers-content {
+            text-align: center;
+            color: white;
+            animation: fadeInUp 1.2s ease-out;
+        }
+
+        .producers-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+            color: #0066cc;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(0, 102, 204, 0.5);
+        }
+
+        .producers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .producer-name {
+            font-size: 2.8rem;
+            font-weight: 600;
+            color: white;
+            position: relative;
+            padding: 25px 50px;
+            background: linear-gradient(90deg, transparent, rgba(0, 102, 204, 0.2), transparent);
+            border-left: 5px solid #cc0000;
+            border-right: 5px solid #0066cc;
+            animation: slideInRight 0.8s ease-out backwards;
+        }
+
+        .producer-name:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .producer-name:nth-child(2) {
+            animation-delay: 0.4s;
+            border-left-color: #0066cc;
+            border-right-color: #cc0000;
+        }
+
+        .producer-name:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .producers-subtitle {
+            font-size: 1.8rem;
+            color: #ccc;
+            font-style: italic;
+            margin-top: 50px;
+        }
+
+        /* SLIDE 2: Title */
+        #slide2 {
+            background: linear-gradient(135deg, #000 0%, #0a1f3d 100%);
+        }
+
+        .title-content {
+            text-align: center;
+            color: white;
+            animation: fadeInUp 1s ease-out;
+            max-width: 1200px;
+        }
+
+        .peace-symbol {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 40px;
+            animation: rotateIn 1.5s ease-out, pulse 2s infinite 1.5s;
+            filter: drop-shadow(0 0 20px rgba(0, 102, 204, 0.6));
+        }
+
+        .title-content h1 {
+            font-size: 5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: white;
+            text-shadow: 0 0 30px rgba(0, 102, 204, 0.8);
+        }
+
+        .title-content .date {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #cc0000;
+            font-weight: 600;
+        }
+
+        .title-content .tagline {
+            font-size: 1.6rem;
+            color: #ccc;
+            font-style: italic;
+            max-width: 900px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* SLIDE 3: What is it */
+        #slide3 {
+            background: #000;
+        }
+
+        .content-box {
+            background: #1a1a1a;
+            padding: 60px;
+            border-radius: 20px;
+            max-width: 1100px;
+            border: 3px solid #0066cc;
+            box-shadow: 0 0 40px rgba(0, 102, 204, 0.3);
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .content-box h2 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 35px;
+            border-bottom: 5px solid #cc0000;
+            padding-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .content-box p {
+            font-size: 1.4rem;
+            line-height: 1.9;
+            color: white;
+            margin-bottom: 25px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #0066cc 0%, #004080 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            font-size: 1.3rem;
+            border-left: 5px solid #cc0000;
+            line-height: 1.8;
+        }
+
+        .highlight-box strong {
+            color: #cc0000;
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* SLIDE 4: History */
+        #slide4 {
+            background: linear-gradient(135deg, #000 0%, #1a0a0a 100%);
+        }
+
+        .timeline {
+            background: #1a1a1a;
+            padding: 60px;
+            border-radius: 20px;
+            max-width: 1200px;
+            border: 3px solid #cc0000;
+            box-shadow: 0 0 40px rgba(204, 0, 0, 0.3);
+        }
+
+        .timeline h2 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 50px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 5px solid #0066cc;
+            padding-bottom: 20px;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            align-items: flex-start;
+            animation: fadeIn 0.6s ease-out;
+            padding: 25px;
+            background: rgba(0, 102, 204, 0.05);
+            border-radius: 10px;
+            border-left: 5px solid #cc0000;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            background: rgba(0, 102, 204, 0.1);
+            transform: translateX(10px);
+        }
+
+        .timeline-year {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #cc0000;
+            min-width: 150px;
+            margin-right: 30px;
+        }
+
+        .timeline-content {
+            flex: 1;
+            font-size: 1.3rem;
+            color: white;
+            line-height: 1.8;
+        }
+
+        /* SLIDE 5: Theme */
+        #slide5 {
+            background: linear-gradient(135deg, #000 0%, #0a1a2e 100%);
+        }
+
+        .theme-box {
+            background: #1a1a1a;
+            padding: 60px;
+            border-radius: 20px;
+            max-width: 1000px;
+            text-align: center;
+            border: 3px solid #0066cc;
+            box-shadow: 0 0 40px rgba(0, 102, 204, 0.3);
+        }
+
+        .theme-box h2 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .theme-year {
+            font-size: 1.6rem;
+            color: #ccc;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .theme-text {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #cc0000;
+            margin: 40px 0;
+            padding: 40px;
+            background: rgba(204, 0, 0, 0.1);
+            border-radius: 15px;
+            border: 3px solid #cc0000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 30px rgba(204, 0, 0, 0.3);
+        }
+
+        .theme-description {
+            font-size: 1.3rem;
+            color: white;
+            line-height: 1.9;
+            margin-top: 35px;
+            text-align: left;
+            padding: 30px;
+            background: rgba(0, 102, 204, 0.1);
+            border-radius: 10px;
+            border-left: 5px solid #0066cc;
+        }
+
+        /* SLIDE 6: Symbols */
+        #slide6 {
+            background: #000;
+        }
+
+        .symbols-grid {
+            background: #1a1a1a;
+            padding: 60px;
+            border-radius: 20px;
+            max-width: 1200px;
+            border: 3px solid #0066cc;
+            box-shadow: 0 0 40px rgba(0, 102, 204, 0.3);
+        }
+
+        .symbols-grid h2 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 50px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 5px solid #cc0000;
+            padding-bottom: 20px;
+        }
+
+        .symbol-item {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(0, 102, 204, 0.05);
+            border-radius: 15px;
+            border-left: 5px solid #cc0000;
+            transition: all 0.3s ease;
+        }
+
+        .symbol-item:hover {
+            background: rgba(0, 102, 204, 0.1);
+            transform: translateX(10px);
+        }
+
+        .symbol-item h3 {
+            font-size: 2rem;
+            color: #0066cc;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .symbol-item p {
+            font-size: 1.3rem;
+            color: white;
+            line-height: 1.8;
+        }
+
+        /* SLIDE 7: How to Participate */
+        #slide7 {
+            background: linear-gradient(135deg, #000 0%, #1a0a0a 100%);
+        }
+
+        .activities-box {
+            background: #1a1a1a;
+            padding: 60px;
+            border-radius: 20px;
+            max-width: 1300px;
+            border: 3px solid #cc0000;
+            box-shadow: 0 0 40px rgba(204, 0, 0, 0.3);
+            overflow-y: auto;
+            max-height: 85vh;
+        }
+
+        .activities-box h2 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 50px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 5px solid #0066cc;
+            padding-bottom: 20px;
+        }
+
+        .activity-card {
+            background: rgba(0, 102, 204, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #0066cc;
+            transition: all 0.3s ease;
+        }
+
+        .activity-card:hover {
+            background: rgba(0, 102, 204, 0.1);
+            transform: translateX(10px);
+            border-left-color: #cc0000;
+        }
+
+        .activity-card h3 {
+            font-size: 1.8rem;
+            color: #cc0000;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .activity-card p {
+            font-size: 1.2rem;
+            color: white;
+            line-height: 1.8;
+        }
+
+        /* SLIDE 8: Conclusion */
+        #slide8 {
+            background: linear-gradient(135deg, #000 0%, #0a1a2e 100%);
+        }
+
+        .conclusion-content {
+            text-align: center;
+            color: white;
+            max-width: 1000px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .conclusion-content h2 {
+            font-size: 4.5rem;
+            margin-bottom: 50px;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(0, 102, 204, 0.8);
+        }
+
+        .dove-icon {
+            width: 200px;
+            height: 200px;
+            margin: 40px auto;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(204, 0, 0, 0.6));
+        }
+
+        .conclusion-content p {
+            font-size: 1.5rem;
+            line-height: 1.9;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .conclusion-content strong {
+            color: #cc0000;
+            font-size: 1.7rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes rotateIn {
+            from {
+                opacity: 0;
+                transform: rotate(-180deg) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(0) scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Scrollbar styling for activities box */
+        .activities-box::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .activities-box::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+
+        .activities-box::-webkit-scrollbar-thumb {
+            background: #0066cc;
+            border-radius: 10px;
+        }
+
+        .activities-box::-webkit-scrollbar-thumb:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <div class="progress-bar" id="progressBar"></div>
+        
+        <div class="slide-counter">
+            <span id="currentSlide">1</span> / <span id="totalSlides">8</span>
+        </div>
+
+<!-- Slide 1: Producers -->
+<div class="slide active" id="slide1">
+    <div class="producers-content">
+        <h2 class="producers-title">Produced By</h2>
+        <div class="producers-list">
+            <div class="producer-name">Abdelilah Chach</div>
+            <div class="producer-name">Amine Taghi</div>
+            <div class="producer-name">Anas Sabiri</div>
+            <div class="producer-name">Abdelhadi Sobaai</div>
+        </div>
+        <p class="producers-subtitle">International Day of Peace Presentation</p>
+    </div>
+</div>
+
+        <!-- Slide 2: Title -->
+        <div class="slide" id="slide2">
+            <div class="title-content">
+                <svg class="peace-symbol" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="90" fill="none" stroke="white" stroke-width="10"/>
+                    <line x1="100" y1="100" x2="100" y2="190" stroke="white" stroke-width="10"/>
+                    <line x1="100" y1="100" x2="40" y2="160" stroke="white" stroke-width="10"/>
+                    <line x1="100" y1="100" x2="160" y2="160" stroke="white" stroke-width="10"/>
+                </svg>
+                <h1>International Day of Peace</h1>
+                <p class="date">September 21st</p>
+                <p class="tagline">"Actions for Peace: Our Ambition for the #GlobalGoals"</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: What is it -->
+        <div class="slide" id="slide3">
+            <div class="content-box">
+                <h2>What is the International Day of Peace?</h2>
+                <p>The International Day of Peace, also officially known as World Peace Day, is a United Nations-sanctioned holiday observed annually on September 21st.</p>
+                <p>It is dedicated to world peace, and specifically the absence of war and violence. The day is marked by activities such as moments of silence, educational events, and calls for ceasefires in conflict zones around the world.</p>
+                <div class="highlight-box">
+                    <strong>Core Purpose:</strong>
+                    To strengthen the ideals of peace, both within and among all nations and peoples, and to provide a globally shared date for all humanity to commit to peace above all differences.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: History -->
+        <div class="slide" id="slide4">
+            <div class="timeline">
+                <h2>A Brief History</h2>
+                <div class="timeline-item">
+                    <div class="timeline-year">1981</div>
+                    <div class="timeline-content">
+                        The United Nations General Assembly established the International Day of Peace, initially celebrated on the third Tuesday of September.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2001</div>
+                    <div class="timeline-content">
+                        The UN General Assembly unanimously voted to designate September 21st as a permanent date for the observance, making it easier for people worldwide to participate together.
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">Today</div>
+                    <div class="timeline-content">
+                        The day is observed by many nations, political groups, military groups, and people around the world. Activities include educational programs, art exhibitions, peace concerts, and moments of silence at noon.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Theme 2025 -->
+        <div class="slide" id="slide5">
+            <div class="theme-box">
+                <h2>Theme for 2025</h2>
+                <p class="theme-year">International Day of Peace 2025</p>
+                <div class="theme-text">
+                    "Cultivating a Culture of Peace"
+                </div>
+                <div class="theme-description">
+                    This theme emphasizes the importance of building peaceful societies through education, dialogue, and understanding. It calls on individuals, communities, and nations to actively create environments where peace can flourish through mutual respect, tolerance, and cooperation.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Symbols -->
+        <div class="slide" id="slide6">
+            <div class="symbols-grid">
+                <h2>Symbols of Peace</h2>
+                <div class="symbol-item">
+                    <h3>🕊️ The Peace Dove</h3>
+                    <p>The white dove carrying an olive branch is one of the most recognized symbols of peace, representing hope, purity, and the end of conflict.</p>
+                </div>
+                <div class="symbol-item">
+                    <h3>☮️ The Peace Symbol</h3>
+                    <p>Created in 1958 for nuclear disarmament, this symbol combines semaphore signals for 'N' and 'D' (Nuclear Disarmament) within a circle representing unity.</p>
+                </div>
+                <div class="symbol-item">
+                    <h3>🔔 The Peace Bell</h3>
+                    <p>The UN Peace Bell is rung every year on the International Day of Peace. It was cast from coins donated by children from 60 nations and serves as a reminder of the human cost of war.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: How to Participate -->
+        <div class="slide" id="slide7">
+            <div class="activities-box">
+                <h2>How Can You Participate?</h2>
+                <div class="activity-card">
+                    <h3>🎓 Organize Educational Events</h3>
+                    <p>Host workshops, seminars, or classroom discussions about peace, conflict resolution, and global cooperation.</p>
+                </div>
+                <div class="activity-card">
+                    <h3>🤝 Community Service</h3>
+                    <p>Engage in volunteer work that promotes understanding between different cultural, religious, or ethnic groups in your community.</p>
+                </div>
+                <div class="activity-card">
+                    <h3>🎨 Creative Expression</h3>
+                    <p>Create art, music, poetry, or media that celebrates peace and share it with your community or on social media using #PeaceDay.</p>
+                </div>
+                <div class="activity-card">
+                    <h3>🤫 Moment of Silence</h3>
+                    <p>Observe a moment of silence at noon in your time zone to honor those affected by violence and renew your commitment to peace.</p>
+                </div>
+                <div class="activity-card">
+                    <h3>📢 Spread Awareness</h3>
+                    <p>Use social media, school announcements, or local media to inform others about the International Day of Peace and its significance.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: Conclusion -->
+        <div class="slide" id="slide8">
+            <div class="conclusion-content">
+                <h2>Together for Peace</h2>
+                <svg class="dove-icon" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 75 30 Q 90 40 95 55 L 120 50 Q 110 65 95 70 Q 100 85 95 100 L 80 95 Q 75 110 70 95 L 55 100 Q 50 85 55 70 Q 40 65 30 50 L 55 55 Q 60 40 75 30 Z" fill="white" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
+                    <circle cx="80" cy="45" r="3" fill="#cc0000"/>
+                    <path d="M 85 55 L 105 50" stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+                <p>Peace is not just the absence of conflict, but the presence of justice, equality, and understanding among all people.</p>
+                <p>Every action we take towards kindness, empathy, and cooperation brings us one step closer to a more peaceful world.</p>
+                <p><strong>Let us commit to being agents of peace in our daily lives.</strong></p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+            <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 8;
+
+        function updateProgressBar() {
+            const progress = (currentSlide / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function updateSlideDisplay() {
+            // Hide all slides
+            const slides = document.querySelectorAll('.slide');
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active', 'prev');
+                if (index + 1 < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+
+            // Show current slide
+            const activeSlide = document.getElementById(`slide${currentSlide}`);
+            activeSlide.classList.add('active');
+
+            // Update counter
+            document.getElementById('currentSlide').textContent = currentSlide;
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+
+            // Update progress bar
+            updateProgressBar();
+        }
+
+        function changeSlide(direction) {
+            const newSlide = currentSlide + direction;
+            if (newSlide >= 1 && newSlide <= totalSlides) {
+                currentSlide = newSlide;
+                updateSlideDisplay();
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                changeSlide(1);
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                changeSlide(-1);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                currentSlide = 1;
+                updateSlideDisplay();
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                currentSlide = totalSlides;
+                updateSlideDisplay();
+            }
+        });
+
+        // Mouse wheel navigation with debounce
+        let wheelTimeout;
+        let isScrolling = false;
+        document.addEventListener('wheel', (e) => {
+            if (isScrolling) return;
+            
+            clearTimeout(wheelTimeout);
+            wheelTimeout = setTimeout(() => {
+                isScrolling = true;
+                if (e.deltaY > 0) {
+                    changeSlide(1);
+                } else {
+                    changeSlide(-1);
+                }
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 700);
+            }, 50);
+        }, { passive: true });
+
+        // Touch swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchEndX < touchStartX - swipeThreshold) {
+                changeSlide(1);
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                changeSlide(-1);
+            }
+        }
+
+        // Initialize
+        updateSlideDisplay();
+    </script>
+</body>
+</html>
